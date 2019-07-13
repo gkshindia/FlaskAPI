@@ -27,7 +27,7 @@ class Item(Resource):
         data = Item.parser.parse_args()
         item = ItemModel(name, data['price'])
         try:
-            item.insert()
+            item.save_to_db()
         except:
             return {'message': f"An error occured while inserting item"}, 500
 
@@ -35,37 +35,23 @@ class Item(Resource):
 
     @jwt_required()
     def delete(self, name):
-        if ItemModel.find_by_name(name) is None:
+        item = ItemModel.find_by_name(name)
+        if item is None:
             return {'message': f"The item doesn't exist at all, better check what you are deleting"}, 400
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-
-        query = "DELETE FROM items WHERE name=?"
-        cursor.execute(query, (name,))
-
-        connection.commit()
-        connection.close()
-
-        return {'message': f"Item deleted"}
+        else:
+            item.delete_from_db()
 
     @jwt_required
     def put(self, name):
         data = Item.parser.parse_args()
         item = ItemModel.find_by_name(name)
-        updated_item = ItemModel(name, data['price'])
 
         if item is None:
-            try:
-                updated_item.insert()
-            except:
-                return{'message': f"An error occured while inserting the item"}, 500
+            item = ItemModel(name, data['price'])
         else:
-            try:
-                updated_item.update()
-            except:
-                return{'message': "An error occured while updating"}
-
-        return updated_item.json()
+            item.price = data['price']
+        item.save_to_db()
+        return item.json()
 
 
 class ItemList(Resource):

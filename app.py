@@ -6,6 +6,7 @@ from resources.user import UserRegister
 from resources.items import ItemList, Item
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # turns off the tracking behavior of flask as the sqalchemy comes with it's own inbuilt tracker
 app.secret_key='giktastic'
