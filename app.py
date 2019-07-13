@@ -2,8 +2,8 @@ from flask import Flask
 from flask_restful import Api
 from flask_jwt import JWT
 from security import authenticate, identity
-from user import UserRegister
-from items import ItemList, Item
+from resources.user import UserRegister
+from resources.items import ItemList, Item
 
 app = Flask(__name__)
 app.secret_key='giktastic'
