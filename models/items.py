@@ -22,8 +22,7 @@ class ItemModel:
         if row:
             return cls(*row) # argument parser, sequentially, like an iteration
 
-
-    def insert(self, item):
+    def insert(self):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
 
@@ -32,8 +31,6 @@ class ItemModel:
 
         connection.commit()
         connection.close()
-
-        return item, 201
 
     def update(self, item):
         connection = sqlite3.connect('data.db')

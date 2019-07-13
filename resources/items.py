@@ -68,7 +68,6 @@ class Item(Resource):
         return updated_item.json()
 
 
-
 class ItemList(Resource):
 
     def get(self):
